@@ -7,7 +7,7 @@ ms.date: 10/10/2024
 
 # Deploy Microsoft Defender for Storage
 
-Microsoft Defender for Storage is an Azure-native solution. It offers an advanced layer of intelligence for detecting and mitigating threats in storage accounts. It uses [Microsoft Threat Intelligence](https://www.microsoft.com/insidetrack/blog/microsoft-uses-threat-intelligence-to-protect-detect-and-respond-to-threats/), Microsoft Defender Antimalware technologies, and Sensitive Data Discovery. It protects Azure Blob Storage, Azure Files, and Azure Data Lake Storage services. The service provides a comprehensive alert suite, near real-time malware scanning (as an add-on), and sensitive data threat detection at no extra cost. This allows you to quickly detect, assess, and respond to potential security threats with detailed information. It helps prevent major impacts on your data and workload, including malicious file uploads, sensitive data exfiltration, and data corruption.
+Microsoft Defender for Storage is an Azure-native solution. It offers an advanced layer of intelligence for detecting and mitigating threats in storage accounts. It uses [Microsoft Defender Threat Intelligence](https://www.microsoft.com/security/business/siem-and-xdr/microsoft-defender-threat-intelligence/), Microsoft Defender Antimalware technologies, and Sensitive Data Discovery. It protects Azure Blob Storage, Azure Files, and Azure Data Lake Storage services. The service provides a comprehensive alert suite, near real-time malware scanning (as an add-on), and sensitive data threat detection at no extra cost. This allows you to quickly detect, assess, and respond to potential security threats with detailed information. It helps prevent major impacts on your data and workload, including malicious file uploads, sensitive data exfiltration, and data corruption.
 
 With Microsoft Defender for Storage, organizations can customize their protection and enforce consistent security policies by enabling it on subscriptions and storage accounts with granular control and flexibility.
 
@@ -26,7 +26,8 @@ To enable and configure Microsoft Defender for Storage and ensure maximum protec
 
 - Enable/disable Microsoft Defender for Storage at the subscription and storage account levels.
 - Enable/disable the malware scanning or sensitive data threat detection configurable features.
-- Set a monthly cap ("capping") on the malware scanning per storage account per month for controlling costs (default value is 5,000 GB).
+- Set a monthly cap ("capping") on the malware scanning per storage account per month for controlling costs (default value is 10,000 GB).
+
 - Configure methods to set up response to malware scanning results.
 - Configure methods for saving malware scanning results logging.
 
@@ -47,9 +48,6 @@ There are several ways to enable and configure Defender for Storage:
 - Directly with the [REST API](defender-for-storage-rest-api-enablement.md?tabs=enable-subscription).
 
 We recommend enabling Defender for Storage via a policy. This method facilitates enablement at scale and ensures a consistent security policy is applied across all existing and future storage accounts within the defined scope, such as entire management groups. This keeps the storage accounts protected with Defender for Storage according to the organization's defined configuration.
-
-> [!NOTE]
-> To prevent migrating back to the legacy classic plan, make sure to disable the old Defender for Storage policies. Look for and disable policies named ``Configure Azure Defender for Storage to be enabled``, ``Azure Defender for Storage should be enabled``, or ``Configure Microsoft Defender for Storage to be enabled (per-storage account plan)`` or deny policies that prevent the disablement of the classic plan.
 
 ## Next steps
 

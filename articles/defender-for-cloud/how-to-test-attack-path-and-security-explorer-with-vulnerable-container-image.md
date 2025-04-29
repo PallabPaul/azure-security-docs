@@ -30,9 +30,9 @@ If there are no entries in the list of attack paths, you can still test this fea
         ```azurecli
         docker pull alpine
         ```
-    
+
     1. Tag the image with the following label and push it to your ACR. Replace `<MYACR>` with your Azure Container Registry name:
-    
+
         ```azurecli
         docker tag alpine <MYACR>.azurecr.io/mdc-mock-0001
         docker push <MYACR>.azurecr.io/mdc-mock-0001
@@ -56,7 +56,7 @@ If there are no entries in the list of attack paths, you can still test this fea
     az aks get-credentials  --subscription <cluster-suid> --resource-group <your-rg> --name <your-cluster-name>    
     ```
 
-1. Install the [ngnix ingress Controller](https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm/) :
+1. Install the [ngnix ingress Controller](https://docs.nginx.com/nginx-ingress-controller/installation/installing-nic/installation-with-helm/) :
 
     ```azurecli
     helm install ingress-controller oci://ghcr.io/nginxinc/charts/nginx-ingress --version 1.0.1
@@ -110,7 +110,7 @@ After you completed testing the attack path, investigate the created attack path
     kubectl get nodes
     ```
 
-1. Install the [ngnix ingress Controller](https://docs.nginx.com/nginx-ingress-controller/installation/installation-with-helm/) :
+1. Install the [ngnix ingress Controller](https://docs.nginx.com/nginx-ingress-controller/installation/installing-nic/installation-with-helm/) :
 
     ```azurecli
     helm install ingress-controller oci://ghcr.io/nginxinc/charts/nginx-ingress --version 1.0.1

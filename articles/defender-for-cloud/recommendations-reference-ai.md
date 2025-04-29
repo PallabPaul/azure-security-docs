@@ -14,22 +14,52 @@ ai-usage: ai-assisted
 
 This article lists all the AI security recommendations you might see in Microsoft Defender for Cloud.
 
-The recommendations that appear in your environment are based on the resources that you're protecting and on your customized configuration.
+The recommendations that appear in your environment are based on the resources that you're protecting and on your customized configuration. You can [see the recommendations in the portal](https://portal.azure.com/#view/Microsoft_Azure_Security/SecurityMenuBlade/~/5) that apply to your resources.
 
 To learn about actions that you can take in response to these recommendations, see [Remediate recommendations in Defender for Cloud](implement-security-recommendations.md).
 
 
 ## Azure recommendations
 
-### [Azure AI Services resources should have key access disabled (disable local authentication)](https://ms.portal.azure.com/#view/Microsoft_Azure_Security/GenericRecommendationDetailsBlade/assessmentKey/13b10b36-aa99-4db6-b00c-dcf87c4761e6)
+### Microsoft Entra ID should be used when connecting Azure AI Foundry to default storage account
 
-**Description**: Key access (local authentication) is recommended to be disabled for security. Azure OpenAI Studio, typically used in development/testing, requires key access and will not function if key access is disabled. After the setting is disabled, Microsoft Entra ID becomes the only access method, which allows maintaining minimum privilege principle and granular control. [Learn more](/azure/ai-services/authentication).
+**Description:** Defender for Cloud identified Credential-based access when connecting to the default storage account in Azure AI Foundry. This poses a risk of unauthorized access. To reduce the risk of unauthorized access, you should disable key-based authorization, and instead use Microsoft Entra ID.
 
-This recommendation replaces the old recommendation *Cognitive Services accounts should have local authentication methods disabled*. It was formerly in category Cognitive Services and Cognitive Search, and was updated to comply with the Azure AI Services naming format and align with the relevant resources. 
+**Severity**: High
+
+### Microsoft Entra ID should be used when connecting to data stores on Azure AI Foundry project
+
+**Description:** Defender for Cloud identified Credential-based access when connecting to the storage account in Azure AI Foundry project. This poses a risk of unauthorized access. To reduce the risk of unauthorized access, you should disable key-based authorization, and instead use Microsoft Entra ID.
+
+**Severity**: High
+
+### Application Insights should be used on Azure AI Foundry
+
+**Description:** Defender for Cloud identified that Application insights is not configured in Azure AI Foundry. The AI Foundry uses Azure Application Insights to store monitoring information about your deployed models. This poses a risk of delayed threat detection and ineffective incident response.
 
 **Severity**: Medium
 
-### [Azure AI Services resources should restrict network access](https://portal.azure.com/#blade/Microsoft_Azure_Security/RecommendationsBlade/assessmentKey/f738efb8-005f-680d-3d43-b3db762d6243)
+### Network connections should be limited on Azure AI Foundry
+
+**Description:** Defender for Cloud identified public network access enabled for all networks in Azure AI Foundry. This poses a risk of exposure to external threats and can result in unauthorized access and data breaches. By restricting network access, you can ensure that only allowed networks can access the service.
+
+**Severity**: Medium
+
+### (Enable if required) Customer-managed keys should be used to encrypt data on Azure AI Foundry
+
+**Description:** Defender for Cloud identified that Microsoft-managed keys are used to encrypt data in Azure AI Foundry. This poses a risk of not complying with regulations for organizations with related compliance requirements. Using customer-managed keys (CMK) to encrypt data at rest provides more control over the key lifecycle, including rotation and management, and is often required to meet compliance standards. This is not assessed by default and should only be applied when required by compliance or restrictive policy requirements. If not enabled, the data will be encrypted using Microsoft-managed keys. To implement this recommendation, update the 'Effect' parameter in the Security Policy for the applicable scope.
+
+**Severity**: Medium
+
+### Azure AI Services resources should have key access disabled (disable local authentication)
+
+**Description**: Key access (local authentication) is recommended to be disabled for security. Azure OpenAI Studio, typically used in development/testing, requires key access, and will not function if key access is disabled. After the setting is disabled, Microsoft Entra ID becomes the only access method, which allows maintaining minimum privilege principle and granular control. [Learn more](/azure/ai-services/authentication).
+
+This recommendation replaces the old recommendation *Cognitive Services accounts should have local authentication methods disabled*. It was formerly in the category Cognitive Services and Cognitive Search and was updated to comply with the Azure AI Services naming format and align with the relevant resources. 
+
+**Severity**: Medium
+
+### Azure AI Services resources should restrict network access
 
 **Description**: By restricting network access, you can ensure that only allowed networks can access the service. This can be achieved by configuring network rules so that only applications from allowed networks can access the Azure AI service resource.
 
@@ -38,7 +68,7 @@ This recommendation replaces the old recommendation *Cognitive Services accounts
 **Severity**: Medium
 
 
-### [Azure AI Services resources should use Azure Private Link](https://ms.portal.azure.com/#view/Microsoft_Azure_Security/GenericRecommendationDetailsBlade/assessmentKey/67279c29-fa4c-4f09-ae59-cb1491565995)
+### Azure AI Services resources should use Azure Private Link
 
 **Description**: Azure Private Link lets you connect your virtual network to Azure services without a public IP address at the source or destination. The Private Link platform reduces data leakage risks by handling the connectivity between the consumer and services over the Azure backbone network.
 
@@ -49,7 +79,7 @@ This recommendation replaces the old recommendation *Cognitive Services should u
 **Severity**: Medium
 
 
-### [(Enable if required) Azure AI Services resources should encrypt data at rest with a customer-managed key (CMK)](https://ms.portal.azure.com/#view/Microsoft_Azure_Security/GenericRecommendationDetailsBlade/assessmentKey/18bf29b3-a844-e170-2826-4e95d0ba4dc9/showSecurityCenterCommandBar~/false)
+### (Enable if required) Azure AI Services resources should encrypt data at rest with a customer-managed key (CMK)
 
 **Description**: Using customer-managed keys to encrypt data at rest provides more control over the key lifecycle, including rotation and management. This is particularly relevant for organizations with related compliance requirements.
 
@@ -59,7 +89,7 @@ This recommendation replaces the old recommendation *Cognitive services accounts
 
 **Severity**: Low
 
-### [Diagnostic logs in Azure AI services resources should be enabled](https://portal.azure.com/#blade/Microsoft_Azure_Security/RecommendationsBlade/assessmentKey/dea5192e-1bb3-101b-b70c-4646546f5e1e)
+### Diagnostic logs in Azure AI services resources should be enabled
 
 **Description**: Enable logs for Azure AI services resources. This enables you to recreate activity trails for investigation purposes, when a security incident occurs or your network is compromised. 
 
@@ -129,23 +159,61 @@ This recommendation replaces the old recommendation *Diagnostic logs in Search s
 
 ## AWS AI recommendations
 
-### [AWS Bedrock should have model invocation logging enabled](https://ms.portal.azure.com/#view/Microsoft_Azure_Security/Recommendation.ReactView/assessedResourceId/%2Fsubscriptions%2Fd1d8779d-38d7-4f06-91db-9cbc8de0176f%2Fresourcegroups%2Fsoc-asc%2Fproviders%2Fmicrosoft.security%2Fsecurityconnectors%2Fawsdspm%2Fsecurityentitydata%2Faws-account-in-region-323104580785-us-west-2%2Fproviders%2Fmicrosoft.security%2Fassessments%2F1a202dce-e13f-43ba-8a97-2f9235c5c834/recommendationDisplayName/AWS%20Bedrock%20should%20have%20model%20invocation%20logging%20enabled)
-
-**Description:** With invocation logging, you can collect the full request data, response data, and metadata associated with all calls performed in your account. This enables you to recreate activity trails for investigation purposes when a security incident occurs.
-
-**Severity:** Low
-
-### [AWS Bedrock should use AWS PrivateLink](https://ms.portal.azure.com/#view/Microsoft_Azure_Security/GenericRecommendationDetailsBlade/assessmentKey/dd55620f-09f2-4d4b-9d6b-adcee7479a64)
+### AWS Bedrock should use AWS PrivateLink
 
 **Description** Amazon Bedrock VPC endpoint powered by AWS PrivateLink, allows you to establish a private connection between the VPC in your account and the Amazon Bedrock service account. AWS PrivateLink enables VPC instances to communicate with Bedrock service resources, without the need for public IP addresses, ensuring your data is not exposed to the public internet and thereby helping with your compliance requirements.
 
 **Severity** Medium
 
-### [AWS Bedrock agents should use guardrails when allowing access to generative AI applications](https://ms.portal.azure.com/#view/Microsoft_Azure_Security/GenericRecommendationDetailsBlade/assessmentKey/7c0c3e91-b674-40d1-8fc4-1bc3c70533e4)
+### AWS Bedrock agents should use guardrails when allowing access to generative AI applications
 
 **Description** Guardrails for Amazon Bedrock enhance the safety of generative AI applications by evaluating both user inputs and model-generated responses. These guardrails include content filters, which help detect and filter harmful content. Specifically, the "Prompt Attacks" category that includes safeguards on user prompts to prevent jailbreaks and prompt injections.
 
 **Severity** Medium
+
+### AWS Bedrock should have model invocation logging enabled
+
+**Description:** With invocation logging, you can collect the full request data, response data, and metadata associated with all calls performed in your account. This enables you to recreate activity trails for investigation purposes when a security incident occurs.
+
+**Severity:** Low
+
+## GCP AI recommendations
+
+### A Private Service endpoint should be used for Vertex AI Online endpoints (Preview)
+
+**Description:** Defender for Cloud has identified that a Private Service endpoint is not configured on Vertex AI Online endpoints. Private endpoint connections enforce secure communication by enabling private connectivity to the Online prediction's endpoint. Configure a private endpoint connection to enable access to traffic coming only from known networks and prevent access from all other IP addresses.
+
+**Severity** Medium
+
+### Root access should be disabled on Workbench instances (Preview)
+
+**Description:** Defender for Cloud has identified that root access is not disabled on the GCP Workbench instance. To reduce the risk of accidental or malicious system damage, it is essential to disable root access on your Google Cloud Vertex AI notebook instances. This measure limits administrative privileges within the instances, ensuring a more secure environment.
+
+**Severity** Medium
+
+### Public IP addresses should be disabled on Workbench instances (Preview)
+
+**Description:** Defender for Cloud has identified that external IP addresses have been configured on the GCP Workbench instance. To reduce your attack surface, Workbench instances shouldn't have public IP addresses. Instead, instances should be configured behind load balancers to minimize the instance's exposure to the internet
+
+**Severity** Medium
+
+### (Enable if required) Customer-managed keys should be used to encrypt data at rest in Vertex AI DataSets (Preview)
+
+**Description:** Defender for Cloud has identified that customer-managed keys are not being used on Vertex AI DataSets. Using customer-managed keys to encrypt data at rest provides more control over the key lifecycle, including rotation and management. This is particularly relevant for organizations with related compliance requirements. By using customer-managed keys, you can ensure that your data is encrypted with keys that you control, giving you the ability to manage and rotate these keys as needed. This added control can help meet compliance requirements and enhance the security of your data.
+
+**Severity** Low
+
+### Cloud Monitoring should be used on GCP Workbench instance (Preview)
+
+**Description** Defender for Cloud has identified that Cloud Monitoring is not enabled on the GCP Workbench instance. Enabling Cloud Monitoring for Google Cloud Vertex AI notebook instances is essential for tracking performance metrics, detecting issues early, and ensuring optimal operation through proactive monitoring and alerts.
+
+**Severity** Low
+
+### Idle shutdown should be enabled on Workbench instances (Preview)
+
+**Description** Defender for Cloud has identified that idle shutdown is not configured on the GCP Workbench instance. To optimize costs and enhance security, ensure that the Idle Shutdown feature is enabled for your Google Cloud Vertex AI notebook instances.
+
+**Severity** Low
 
 ## Related content
 

@@ -7,7 +7,7 @@ author: msmbaldwin
 ms.service: azure-key-vault
 ms.subservice: general
 ms.topic: overview
-ms.date: 01/30/2024
+ms.date: 03/07/2025
 ms.author: mbaldwin
 ---
 
@@ -46,9 +46,8 @@ The Azure Key Vault resource provider supports two resource types: vaults and ma
 Cloud environment | DNS suffix for vaults | DNS suffix for managed HSMs
 ---|---|---
 Azure Cloud | .vault.azure.net | .managedhsm.azure.net
-Microsoft Azure operated by 21Vianet Cloud | .vault.azure.cn | Not supported
-Azure US Government | .vault.usgovcloudapi.net | Not supported
-Azure German Cloud | .vault.microsoftazure.de | Not supported
+Microsoft Azure operated by 21Vianet Cloud | .vault.azure.cn | .managedhsm.azure.cn
+Azure US Government | .vault.usgovcloudapi.net | .managedhsm.usgovcloudapi.net
 
 ## Object types
  This table shows object types and their suffixes in the object identifier.
@@ -74,7 +73,7 @@ For more general information about Key Vault, see [About Azure Key Vault](overvi
 
 Refer to the JOSE specifications for relevant data types for keys, encryption, and signing.  
 
--   **algorithm** - a supported algorithm for a key operation, for example, RSA1_5  
+-   **algorithm** - a supported algorithm for a key operation, for example, RSA_OAEP_256  
 -   **ciphertext-value** - cipher text octets, encoded using Base64URL  
 -   **digest-value** - the output of a hash algorithm, encoded using Base64URL  
 -   **key-type** - one of the supported key types, for example RSA (Rivest-Shamir-Adleman).  

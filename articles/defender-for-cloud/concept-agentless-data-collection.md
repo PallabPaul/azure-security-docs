@@ -5,7 +5,7 @@ author: dcurwin
 ms.author: dacurwin
 ms.service: defender-for-cloud
 ms.topic: concept-article
-ms.date: 12/09/2024
+ms.date: 02/19/2025
 ms.custom: template-concept
 #customer intent: As a user, I want to understand how agentless machine scanning works in Defender for Cloud so that I can effectively collect data from my machines.
 ---
@@ -28,7 +28,7 @@ Agentless scanning is available in the following Defender for Cloud plans:
 - [Defender Cloud Security Posture Management (CSPM)](concept-cloud-security-posture-management.md).
 - [Defender for Servers Plan 2](defender-for-servers-overview.md#defender-for-servers-plans).
 - Malware scanning is only available in Defender for Servers Plan 2.
-- Agentless scanning is available for Azure VMs, GCP/AWS machines connected to Defender for Cloud, and on-premises machines that are onboarded as Azure Arc-enabled VMs.
+- Agentless scanning is available for Azure VMs, AWS EC2 and GCP compute instances connected to Defender for Cloud.
 
 ## Agentless scanning architecture
 
@@ -43,7 +43,7 @@ Here's how agentless scanning works:
 
 1. Defender for Cloud displays scanning results, which consolidates both the agent-based and agentless results on the Security alerts page.
 
-3. Defender for Cloud analyses disks in a scanning environment that's regional, volatile, isolated, and highly secure. Disk snapshots and data unrelated to the scan aren't stored longer than is necessary to collect the metadata, typically a few minutes.
+1. Defender for Cloud analyses disks in a scanning environment that's regional, volatile, isolated, and highly secure. Disk snapshots and data unrelated to the scan aren't stored longer than is necessary to collect the metadata, typically a few minutes.
 
 :::image type="content" source="media/concept-agentless-data-collection/agentless-scanning-process.png" alt-text="Diagram of the process for collecting operating system data through agentless scanning.":::
 
@@ -69,7 +69,7 @@ The built-in role **VM scanner operator** has read-only permissions for VM disks
 - `Microsoft.Compute/virtualMachineScaleSets/virtualMachines/read`
 - `Microsoft.Compute/virtualMachineScaleSets/virtualMachines/instanceView/read`
 
-When coverage for CMK encrypted disks is enabled, more permissions are used:
+When coverage for CMK encrypted disks is enabled, more permissions are required:
 
 - `Microsoft.KeyVault/vaults/keys/read`
 - `Microsoft.KeyVault/vaults/keys/wrap/action`

@@ -2,7 +2,7 @@
 title: Connect your AWS account
 description: Defend your AWS resources with Microsoft Defender for Cloud, a guide to set up and configure Defender for Cloud to protect your workloads in AWS.
 ms.topic: install-set-up-deploy
-ms.date: 07/17/2024
+ms.date: 01/29/2025
 ---
 
 # Connect AWS accounts to Microsoft Defender for Cloud
@@ -53,6 +53,8 @@ To complete the procedures in this article, you need:
 - Access to an AWS account.
 
 - Contributor level permission for the relevant Azure subscription.
+  
+- If CIEM is enabled as part of Defender for CSPM the user enabling the connector will also need [Security Admin role and Application.ReadWrite.All permission](enable-permissions-management.md#before-you-start) for your tenant.
 
 > [!NOTE]
 > The AWS connector is not available on the national government clouds (Azure Government, Microsoft Azure operated by 21Vianet).
@@ -100,7 +102,7 @@ If you choose the Defender for open-source relational databases plan, you need:
 
 - You must [enable Microsoft Defender for Cloud](get-started.md#enable-defender-for-cloud-on-your-azure-subscription) on your Azure subscription.
 
-- Connect your [Azure account](connect-azure-subscription.md) or [AWS account](quickstart-onboard-aws.md).
+- Connect your [Azure account](connect-azure-subscription.md) or AWS account.
 
 Region availability: All public AWS regions (excluding Tel Aviv, Milan, Jakarta, Spain and Bahrain).
 
@@ -149,7 +151,7 @@ If you choose the Microsoft Defender CSPM plan, you need:
 
 - a Microsoft Azure subscription. If you don't have an Azure subscription, you can [sign up for a free subscription](https://azure.microsoft.com/pricing/free-trial/).
 - You must [enable Microsoft Defender for Cloud](get-started.md#enable-defender-for-cloud-on-your-azure-subscription) on your Azure subscription.
-- Connect your [non-Azure machines](quickstart-onboard-machines.md), [AWS accounts](quickstart-onboard-aws.md).
+- Connect your [non-Azure machines](quickstart-onboard-machines.md) and AWS accounts.
 - In order to gain access to all of the features available from the CSPM plan, the plan must be enabled by the **Subscription Owner**.
 - To enable CIEM (Cloud Infrastructure Entitlement Management) capabilities, the Entra ID account used for the onboarding process must have either the Application Administrator or Cloud Application Administrator directory role for your tenant (or equivalent administrator rights to create app registrations). This requirement is only necessary during the onboarding process.
 
@@ -296,7 +298,7 @@ To view all the active recommendations for your resources by resource type, use 
 
 ## Integrate with Microsoft Defender XDR
 
-When you enable Defender for Cloud, its security alerts are automatically integrated into the Microsoft Defender Portal. No further steps are needed.
+When you enable Defender for Cloud, its security alerts are automatically integrated into the Microsoft Defender Portal.
 
 The integration between Microsoft Defender for Cloud and Microsoft Defender XDR brings your cloud environments into Microsoft Defender XDR. With Defender for Cloud's alerts and cloud correlations integrated into Microsoft Defender XDR, SOC teams can now access all security information from a single interface.
 

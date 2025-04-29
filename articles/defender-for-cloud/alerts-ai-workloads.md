@@ -53,19 +53,9 @@ This article lists the security alerts you might get for AI workloads from Micro
 
 **Severity**: Medium
 
-### Sensitive Data Exposure Detected in Azure AI Model Deployment
-
-(AI.Azure_DataLeakInModelResponse.Sensitive)
-
-**Description**: The sensitive data leakage alert is designed to notify the SOC that a GenAI model responded to a user prompt with sensitive information, potentially due to a malicious user attempting to bypass the generative AI’s safeguards to access unauthorized sensitive data.
-
-**[MITRE tactics](alerts-reference.md#mitre-attck-tactics)**: Collection
-
-**Severity**: Low
-
 ### Corrupted AI application\model\data directed a phishing attempt at a user
 
-(AI.Azure_PhishingContentInModelResponse)
+(AI.Azure_MaliciousUrl.ModelResponse)
 
 **Description**: This alert indicates a corruption of an AI application developed by the organization, as it has actively shared a known malicious URL used for phishing with a user. The URL originated within the application itself, the AI model, or the data the application can access.
 
@@ -75,7 +65,7 @@ This article lists the security alerts you might get for AI workloads from Micro
 
 ### Phishing URL shared in an AI application
 
-(AI.Azure_PhishingContentInAIApplication)
+(AI.Azure_MaliciousUrl.UnknownSource)
 
 **Description**: This alert indicates a potential corruption of an AI application, or a phishing attempt by one of the end users. The alert determines that a malicious URL used for phishing was passed during a conversation through the AI application, however the origin of the URL (user or application) is unclear.
 
@@ -85,7 +75,7 @@ This article lists the security alerts you might get for AI workloads from Micro
 
 ### Phishing attempt detected in an AI application
 
-(AI.Azure_PhishingContentInUserPrompt)
+(AI.Azure_MaliciousUrl.UserPrompt)
 
 **Description**: This alert indicates a URL used for phishing attack was sent by a user to an AI application. The content typically lures visitors into entering their corporate credentials or financial information into a legitimate looking website. Sending this to an AI application might be for the purpose of corrupting it, poisoning the data sources it has access to, or gaining access to employees or other customers via the application's tools.
 
@@ -122,6 +112,66 @@ This article lists the security alerts you might get for AI workloads from Micro
 **[MITRE tactics](alerts-reference.md#mitre-attck-tactics)**: Execution
 
 **Severity**: High
+
+### Access from suspicious IP
+
+(AI.Azure_AccessFromSuspiciousIP)
+
+**Description**: An IP address accessing one of your AI services was identified by Microsoft Threat Intelligence as having a high probability of being a threat. While observing malicious Internet traffic, this IP came up as involved in attacking other online targets.
+
+**[MITRE tactics](alerts-reference.md#mitre-attck-tactics)**: Execution
+
+**Severity**: High
+
+### Suspected wallet attack - recurring requests
+
+(AI.Azure_DOWDuplicateRequests)
+
+**Description**: Wallet attacks are a family of attacks common for AI resources that consist of threat actors excessively engage with an AI resource directly or through an application in hopes of causing the organization large financial damages. This detection tracks high volumes of identical requests targeting the same AI resource which may be caused due to an ongoing attack.
+
+**[MITRE tactics](alerts-reference.md#mitre-attck-tactics)**: Impact
+
+**Severity**: Medium
+
+### Suspected wallet attack - volume anomaly
+
+(AI.Azure_DOWVolumeAnomaly)
+
+**Description**: Wallet attacks are a family of attacks common for AI resources that consist of threat actors excessively engage with an AI resource directly or through an application in hopes of causing the organization large financial damages. This detection tracks high volumes of requests and responses by the resource that are inconsistent with its historical usage patters.
+
+**[MITRE tactics](alerts-reference.md#mitre-attck-tactics)**: Impact
+
+**Severity**: Medium
+
+### Access anomaly in AI resource
+
+(AI.Azure_AccessAnomaly)
+
+**Description**: This alert track anomalies in access patterns to an AI resource. Changes in request parameters by users or applications such as user agents, IP ranges, authentication methods, etc. can indicate a compromised resource that is now being accessed by malicious actors. This alert may trigger when requests are valid if they represent significant changes in the pattern of previous access to a certain resource.
+
+**[MITRE tactics](alerts-reference.md#mitre-attck-tactics)**: Execution, Reconnaissance, Initial access
+
+**Severity**: Medium
+
+### Suspicious invocation of a high-risk 'Initial Access' operation by a service principal detected (AI resources)
+
+(AI.Azure_AnomalousOperation.InitialAccess)
+
+**Description**: This alert detects a suspicious invocation of a high-risk operation in your subscription, which might indicate an attempt to access restricted resources. The identified AI-resource related operations are designed to allow administrators to efficiently access their environments. While this activity might be legitimate, a threat actor might utilize such operations to gain initial access to restricted AI resources in your environment. This can indicate that the service principal is compromised and is being used with malicious intent.
+
+**[MITRE tactics](alerts-reference.md#mitre-attck-tactics)**: Initial access
+
+**Severity**: Medium
+
+### Suspicious anomaly detected in sensitive data exposed by an AI resource
+
+(AI.Azure_SensitiveDataAnomaly)
+
+**Description**: This alert studies the sensitive data usage patterns of AI resources and aims to detect when an AI application is discussing sensitive data out of pattern. The alert is looking for sensitive info types that have not been previously passed in the model responses, to detect suspicious behavior or intent deviation of the application or data exfiltration. Since this alert is designed to detect anomalies it will not trigger for new resources or newly onboarded subscriptions for a certain period of time.
+
+**[MITRE tactics](alerts-reference.md#mitre-attck-tactics)**: Collection
+
+**Severity**: Medium
 
 > [!NOTE]
 > For alerts that are in preview: [!INCLUDE [Legalese](./includes/defender-for-cloud-preview-legal-text.md)]

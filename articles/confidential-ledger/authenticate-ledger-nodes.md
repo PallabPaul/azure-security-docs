@@ -5,13 +5,13 @@ services: confidential-ledger
 author: msmbaldwin
 ms.service: azure-confidential-ledger
 ms.topic: overview
-ms.date: 01/30/2024
+ms.date: 04/14/2025
 ms.author: mbaldwin
 
 ---
 # Authenticating Azure confidential ledger nodes
 
-Code samples and users can authenticate Azure confidential ledger nodes.
+Code samples and users can authenticate Azure confidential ledger nodes. There are two methods to authenticate ledger nodes: code sample's node certificate when querying the identity service and validation through users to confirm they are in fact using the ledger's enclaves.
 
 ## Code samples
 

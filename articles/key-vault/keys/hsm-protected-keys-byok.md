@@ -9,7 +9,7 @@ ms.custom: devx-track-azurepowershell, devx-track-azurecli
 ms.service: azure-key-vault
 ms.subservice: keys
 ms.topic: tutorial
-ms.date: 01/30/2024
+ms.date: 03/07/2025
 ms.author: mbaldwin
 ---
 
@@ -20,8 +20,6 @@ For added assurance when you use Azure Key Vault, you can import or generate a k
 Use the information in this article to help you plan for, generate, and transfer your own HSM-protected keys to use with Azure Key Vault.
 
 > [!NOTE]
-> This functionality is not available for Microsoft Azure operated by 21Vianet.
->
 > This import method is available only for [supported HSMs](#supported-hsms).
 
 For more information, and for a tutorial to get started using Key Vault (including how to create a key vault for HSM-protected keys), see [What is Azure Key Vault?](../general/overview.md).
@@ -34,7 +32,7 @@ Here's an overview of the process. Specific steps to complete are described late
 * Download the KEK public key as a .pem file.
 * Transfer the KEK public key to an offline computer that is connected to an on-premises HSM.
 * In the offline computer, use the BYOK tool provided by your HSM vendor to create a BYOK file.
-* The target key is encrypted with a KEK, which stays encrypted until it is transferred to the Key Vault HSM. Only the encrypted version of your key leaves the on-premises HSM.
+* The target key is encrypted with a KEK, which stays encrypted until it's transferred to the Key Vault HSM. Only the encrypted version of your key leaves the on-premises HSM.
 * A KEK that's generated inside a Key Vault HSM is not exportable. HSMs enforce the rule that no clear version of a KEK exists outside a Key Vault HSM.
 * The KEK must be in the same key vault where the target key will be imported.
 * When the BYOK file is uploaded to Key Vault, a Key Vault HSM uses the KEK private key to decrypt the target key material and import it as an HSM key. This operation happens entirely inside a Key Vault HSM. The target key always remains in the HSM protection boundary.
@@ -65,17 +63,20 @@ The following table lists prerequisites for using BYOK in Azure Key Vault:
 |StorMagic|ISV (Enterprise Key Management System)|Multiple HSM brands and models including<ul><li>Utimaco</li><li>Thales</li><li>nCipher</li></ul>See [StorMagic site for details](https://stormagic.com/doc/svkms/Content/Integrations/Azure_KeyVault_BYOK.htm)|[SvKMS and Azure Key Vault BYOK](https://stormagic.com/doc/svkms/Content/Integrations/Azure_KeyVault_BYOK.htm)|
 |Thales|Manufacturer|<ul><li>Luna HSM 7 family with firmware version 7.3 or newer</li></ul>| [Luna BYOK tool and documentation](https://supportportal.thalesgroup.com/csm?id=kb_article_view&sys_kb_id=3892db6ddb8fc45005c9143b0b961987&sysparm_article=KB0021016)|
 |Utimaco|Manufacturer,<br/>HSM as a service|u.trust Anchor, CryptoServer| Utimaco BYOK tool and Integration guide |
+|Yubico|Manufacturer|YubiHSM 2| [YubiHSM 2 BYOK User Guide for Azure](https://resources.yubico.com/53ZDUYE6/at/2rsrrspcftx4xkp8fn9nsgv/YubiHSM_2_BYOK_User_Guide_for_Azure.pdf?format=pdf) |
 ||||
 
 ## Supported key types
 
 |Key name|Key type|Key size/curve|Origin|Description|
 |---|---|---|---|---|
-|Key Exchange Key (KEK)|RSA| 2,048-bit<br />3,072-bit<br />4,096-bit|Azure Key Vault HSM|An HSM-backed RSA key pair generated in Azure Key Vault|
+|Key Exchange Key (KEK)|RSA-HSM| 2,048-bit<br />3,072-bit<br />4,096-bit|Azure Key Vault HSM|An HSM-backed RSA key pair generated in Azure Key Vault|
 |Target key|
-||RSA|2,048-bit<br />3,072-bit<br />4,096-bit|Vendor HSM|The key to be transferred to the Azure Key Vault HSM|
-||EC|P-256<br />P-384<br />P-521|Vendor HSM|The key to be transferred to the Azure Key Vault HSM|
-||||
+||RSA-HSM|2,048-bit<br />3,072-bit<br />4,096-bit|Vendor HSM|The key to be transferred to the Azure Key Vault HSM.|
+||EC-HSM|P-256<br />P-384<br />P-521|Vendor HSM|The key to be transferred to the Azure Key Vault HSM.|
+||OCT-HSM|128-bit<br/>192-bit<br/>256-bit<br/>|Vendor HSM|The key to be transferred to the Azure Key Vault HSM. Only supported on Azure Key Vault Managed HSM.|
+> [!NOTE]
+> RSA and EC are software key types that, while supported as target key types for testing, are transferred to the Key Vault Service rather than Key Vault HSMs.
 
 ## Generate and transfer your key to Key Vault Premium HSM or Managed HSM
 
@@ -98,7 +99,7 @@ The KEK must be:
 > [!NOTE]
 > The KEK must have 'import' as the only allowed key operation. 'import' is mutually exclusive with all other key operations.
 
-Use the [az keyvault key create](/cli/azure/keyvault/key#az-keyvault-key-create) command to create a KEK that has key operations set to `import`. Record the key identifier (`kid`) that's returned from the following command. (You will use the `kid` value in [Step 3](#generate-and-prepare-your-key-for-transfer).)
+Use the [az keyvault key create](/cli/azure/keyvault/key#az-keyvault-key-create) command to create a KEK that has key operations set to `import`. Record the key identifier (`kid`) that's returned from the following command. (You'll use the `kid` value in [Step 3](#generate-and-prepare-your-key-for-transfer).)
 
 ### [Azure CLI](#tab/azure-cli)
 
@@ -156,7 +157,7 @@ Get-AzKeyVaultKey -HsmName 'ContosoKeyVaultHSM' -KeyName 'KEKforBYOK' -OutFile '
 
 ---
 
-Transfer the KEKforBYOK.publickey.pem file to your offline computer. You will need this file in the next step.
+Transfer the KEKforBYOK.publickey.pem file to your offline computer. You'll need this file in the next step.
 
 ### Generate and prepare your key for transfer
 
@@ -165,7 +166,7 @@ Refer to your HSM vendor's documentation to download and install the BYOK tool. 
 Transfer the BYOK file to your connected computer.
 
 > [!NOTE]
-> Importing RSA 1,024-bit keys is not supported. Importing Elliptic Curve key with curve P-256K is supported.
+> Importing Elliptic Curve key with curve P-256K is supported.
 >
 > **Known issue**: Importing an RSA 4K target key from Luna HSMs is only supported with firmware 7.4.0 or newer.
 

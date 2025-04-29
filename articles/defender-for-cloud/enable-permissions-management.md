@@ -10,15 +10,22 @@ ms.date: 06/09/2024
 
 # Enable Permissions Management (CIEM)
 
+> [!NOTE]
+> Effective April 1, 2025, Microsoft Entra Permissions Management will no longer be available for purchase.
+>
+> On October 1, 2025, Microsoft will retire and discontinue support for this product. Learn more about [the retirement of Microsoft Entra Permissions Management](https://aka.ms/mepmretire).
+> 
+> The deprecation of Microsoft Entra Permissions Management doesn't affect any existing CIEM capabilities in Microsoft Defender for Cloud. Learn more about [the future of CIEM in Microsoft Defender for Cloud](https://aka.ms/mdc-ciem).
+
 Microsoft Defender for Cloud's integration with Microsoft Entra Permissions Management (Permissions Management) provides a Cloud Infrastructure Entitlement Management (CIEM) security model that helps organizations manage and control user access and entitlements in their cloud infrastructure. CIEM is a critical component of the Cloud Native Application Protection Platform (CNAPP) solution that provides visibility into who or what has access to specific resources. It ensures that access rights adhere to the principle of least privilege (PoLP), where users or workload identities, such as apps and services, receive only the minimum levels of access necessary to perform their tasks. CIEM also helps organizations to monitor and manage permissions across multiple cloud environments, including Azure, AWS, and GCP.
 
 ## Before you start
 
 - You must [enable Defender CSPM](tutorial-enable-cspm-plan.md) on your Azure subscription, AWS account, or GCP project.
 
-- Have the following roles and permissions
-    - **AWS and GCP**: Security Admin, Application.ReadWrite.All
-    - **Azure**: Security Admin, Microsoft.Authorization/roleAssignments/write
+- You must have the following Azure roles and permissions, depending on the cloud environment, to enable the **Permissions Management (CIEM)** extension of Defender CSPM:
+  - **AWS and GCP**: [Security Admin role](/azure/role-based-access-control/built-in-roles/security#security-admin) and [Application.ReadWrite.All permission](/graph/permissions-reference#applicationreadwriteall) for your tenant.
+  - **Azure**: [Security Admin role](/azure/role-based-access-control/built-in-roles/security#security-admin) and [Microsoft.Authorization/roleAssignments/write permission](/azure/role-based-access-control/permissions/management-and-governance#microsoftauthorization) for the subscription.
 
 - **AWS Only**: [Connect your AWS account to Defender for Cloud](quickstart-onboard-aws.md).
 
@@ -27,26 +34,26 @@ Microsoft Defender for Cloud's integration with Microsoft Entra Permissions Mana
 ## Enable Permissions Management (CIEM) for Azure
 
 When you enabled the Defender CSPM plan on your Azure account, the **Azure CSPM** [standard is automatically assigned to your subscription](concept-regulatory-compliance-standards.md). The Azure CSPM standard provides Cloud Infrastructure Entitlement Management (CIEM) recommendations.
- 
-When Permissions Management (CIEM) is disabled, the CIEM recommendations within the Azure CSPM standard won’t be calculated.
+
+When Permissions Management (CIEM) is disabled, the CIEM recommendations within the Azure CSPM standard aren't calculated.
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
 
-1. Search for and select  **Microsoft Defender for Cloud**.
+2. Search for and select  **Microsoft Defender for Cloud**.
 
-1. Navigate to **Environment settings**.
+3. Navigate to **Environment settings**.
 
-1. Select relevant subscription.
+4. Select relevant subscription.
 
-1. Locate the Defender CSPM plan and select **Settings**.
+5. Locate the Defender CSPM plan and select **Settings**.
 
-1. Enable **Permissions Management (CIEM)**.
+6. Enable **Permissions Management (CIEM)**.
 
     :::image type="content" source="media/enable-permissions-management/permissions-management-on.png" alt-text="Screenshot that shows you where the toggle is for the permissions management is located." lightbox="media/enable-permissions-management/permissions-management-on.png":::
 
-1. Select **Continue**.
+7. Select **Continue**.
 
-1. Select **Save**.
+8. Select **Save**.
 
 The applicable Permissions Management (CIEM) recommendations appear on your subscription within a few hours.
 
@@ -58,8 +65,8 @@ List of Azure recommendations:
 
 ## Enable Permissions Management (CIEM) for AWS
 
-When you enabled the Defender CSPM plan on your AWS account, the **AWS CSPM** [standard is automatically assigned to your subscription](concept-regulatory-compliance-standards.md). The AWS CSPM standard provides Cloud Infrastructure Entitlement Management (CIEM) recommendations. 
-When Permission Management is disabled, the CIEM recommendations within the AWS CSPM standard won’t be calculated.
+When you enabled the Defender CSPM plan on your AWS account, the **AWS CSPM** [standard is automatically assigned to your subscription](concept-regulatory-compliance-standards.md). The AWS CSPM standard provides Cloud Infrastructure Entitlement Management (CIEM) recommendations.
+When Permission Management is disabled, the CIEM recommendations within the AWS CSPM standard aren't calculated.
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
 
@@ -76,8 +83,6 @@ When Permission Management is disabled, the CIEM recommendations within the AWS 
 1. Enable **Permissions Management (CIEM)**.
 
 1. Select **Configure access**.
-
-1. Select the relevant permissions type.
 
 1. Select a deployment method.
 
@@ -101,9 +106,9 @@ List of AWS recommendations:
 
 ## Enable Permissions Management (CIEM) for GCP
 
-When you enabled the Defender CSPM plan on your GCP project, the **GCP CSPM** [standard is automatically assigned to your subscription](concept-regulatory-compliance-standards.md). The GCP CSPM standard provides Cloud Infrastructure Entitlement Management (CIEM) recommendations. 
+When you enabled the Defender CSPM plan on your GCP project, the **GCP CSPM** [standard is automatically assigned to your subscription](concept-regulatory-compliance-standards.md). The GCP CSPM standard provides Cloud Infrastructure Entitlement Management (CIEM) recommendations.
 
-When Permissions Management (CIEM) is disabled, the CIEM recommendations within the GCP CSPM standard won’t be calculated.
+When Permissions Management (CIEM) is disabled, the CIEM recommendations within the GCP CSPM standard aren't calculated.
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
 
@@ -117,7 +122,7 @@ When Permissions Management (CIEM) is disabled, the CIEM recommendations within 
 
     :::image type="content" source="media/enable-permissions-management/settings-google.png" alt-text="Screenshot that shows where to select settings for the Defender CSPM plan for your GCP project." lightbox="media/enable-permissions-management/settings-google.png":::
 
-1. Toggle Permissions Management **(CIEM)** to **On**.
+1. Toggle Permissions Management (CIEM) to **On**.
 
 1. Select **Save**.
 
@@ -137,7 +142,7 @@ When Permissions Management (CIEM) is disabled, the CIEM recommendations within 
 
 1. Select **Update**.
 
-The applicable Permissions Management **(CIEM)** recommendations appear on your subscription within a few hours.
+The applicable Permissions Management (CIEM) recommendations appear on your subscription within a few hours.
 
 List of GCP recommendations:
 
@@ -145,7 +150,3 @@ List of GCP recommendations:
 
 - Permissions of inactive identities in your GCP project should be revoked
 
-## Next step
-
-> [!div class="nextstepaction"]
-> [Microsoft Entra Permissions Management](/entra/permissions-management/).
