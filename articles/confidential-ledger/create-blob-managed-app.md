@@ -35,19 +35,30 @@ Once the required fields are filled and the application is deployed, the followi
 - [Function App](/azure/azure-functions/functions-overview)
 - [Application Insights](/azure/azure-monitor/app/app-insights-overview)
 
-## Connecting a storage account to the managed application
+## Connecting a Storage Account to the Managed Application
 
-Once a Managed Application is created, you're able to then connect the Managed Application to your Storage Account to start processing and recording Blob Container digests to Azure Confidential Ledger.
+After the Managed Application has been successfully deployed, you can connect it to an Azure Storage Account to enable the processing and recording of Blob Container digests into Azure Confidential Ledger.
+
+The Managed Application currently supports the following types of storage accounts:
+
+- **Standard General Purpose v2 (GPv2) Storage Accounts**, including those configured for hot, cool, or archive tiers.
+- **Azure Data Lake Storage Gen2 (ADLS Gen2)** accounts with **Hierarchical Namespace (HNS)** enabled.
+- **Storage accounts with either public or private endpoint configurations**, provided that appropriate network and identity permissions are granted.
+- **Standard or Premium performance tiers**, as long as the **Blob service** is enabled.
+
+> **Note:** Only the Blob service is supported. Other services (e.g., File, Table, or Queue) are not applicable for use with the Managed Application.
 
 ### Create a topic and event subscription for the storage account
 
-The Managed Application uses an Azure Service Bus Queue to track and record all **Create Blob** events. You will use the Queue created in the Managed Resource Group by the Managed Application and add it as an Event Subscriber for any storage account that you're creating blobs for.
+The Managed Application uses an Azure Service Bus Queue to track and record all **Create Blob** and **Delete Blob** events. You will use the Queue created in the Managed Resource Group by the Managed Application and add it as an Event Subscriber for any storage account that you're creating blobs for. Also, ensure the `System Topic Name` associated with the storage account you are tracking is assigned the `Azure Service Bus Data Sender` for the Azure Service Bus Queue created by the managed app.
 
 ### [Azure portal](#tab/azure-portal)
 
+:::image type="content" source="./media/managed-application/managed-app-event-topic-inline.png" alt-text="Screenshot of the Azure portal in a web browser, showing how to set up a service bus role." lightbox="./media/managed-application/managed-app-event-topic-enhanced.png":::
+
 :::image type="content" source="./media/managed-application/managed-app-event-subscription-inline.png" alt-text="Screenshot of the Azure portal in a web browser, showing how to set up a storage event subscription." lightbox="./media/managed-application/managed-app-event-subscription-enhanced.png":::
 
-On the Azure portal, you can navigate to the storage account that you would like to start creating blob digests for and go to the `Events` blade. There you can create an Event Subscription and connect it to the Azure Service Bus Queue Endpoint.
+On the Azure portal, you can navigate to the storage account that you would like to start creating blob digests for and go to the `Events` blade. There you can create an Event Subscription and connect it to the Azure Service Bus Queue Endpoint. Be sure to mark the `Managed identity type` as `System Assigned`.
 
 :::image type="content" source="./media/managed-application/managed-app-event-session-id-inline.png" alt-text="Screenshot of the Azure portal in a web browser, showing how to set up a storage event subscription session ID." lightbox="./media/managed-application/managed-app-event-session-id-enhanced.png":::
 
@@ -59,11 +70,12 @@ The queue uses sessions to maintain ordering across multiple storage accounts so
 
 ```azurecli
 az eventgrid system-topic create \
---resource-group {resource_group} \
---name {sample_topic_name} \
---location {location} \
---topic-type microsoft.storage.storageaccounts \
---source /subscriptions/{subscription}/resourceGroups/{resource_group}/providers/Microsoft.Storage/storageAccounts/{storage_account_name}
+  --resource-group {resource_group} \
+  --name {sample_topic_name} \
+  --location {location} \
+  --topic-type microsoft.storage.storageaccounts \
+  --source /subscriptions/{subscription}/resourceGroups/{resource_group}/providers/Microsoft.Storage/storageAccounts/{storage_account_name} \
+  --identity SystemAssigned
 ```
 
 `resource-group` - Resource Group of where Topic should be created
@@ -213,6 +225,43 @@ Once an audit is performed successfully, the results of the audit can be found u
 :::image type="content" source="./media/managed-application/managed-app-email-alert-inline.png" alt-text="Screenshot of managed app provisioning displaying the audit email alert settings." lightbox="./media/managed-application/managed-app-email-alert-enhanced.png":::
 
 When creating the managed application, if you opt in for email alerts you will get an email sent to your email during an `Audit Failure` or an `Audit Success and Failure` depending on what option is selected.
+
+### Enabling user tracking audits
+
+You can track which users uploaded or deleted blobs using diagnostic logs sent to the internal storage account created by the managed app.
+
+#### 1. Enable diagnostic settings
+
+1. Go to your **Storage Account** → **Monitoring** → **Diagnostic settings**.
+2. Add a new setting for the **"blob"** service.
+3. Enable:
+   - `Storage Write`
+   - `Storage Delete`
+4. Set the destination to the internal archive Storage account created by the managed app.
+
+#### 2. Send the following message to the Service Bus Queue (with a session ID):
+
+Once you see the diagnostic logs flowing into the storage account you can add the `getUsers` field when triggering an audit event:
+
+```json
+{
+"eventType": "PerformAudit",
+"storageAccount": "<storage_account_name>",
+"blobContainer": "<blob_container_name>",
+"getUsers": true
+}
+```
+
+#### 3. Check the audit results
+
+Once an audit is successfully processed, each entry will include the user who performed the operation along with their OID if found:
+
+```json
+"user": {
+  "upn": "user@example.com",
+  "oid": "<object-id>"
+}
+```
 
 ## Logging and errors
 
